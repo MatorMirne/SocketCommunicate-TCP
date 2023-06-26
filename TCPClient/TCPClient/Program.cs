@@ -16,10 +16,11 @@ class Program
         socket.Send(sendBuffer);
         
         byte[] receiveBuffer = new byte[1024];
-        int receiveSize = socket.Receive(receiveBuffer);
-        string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveSize);
-        
+        socket.Receive(receiveBuffer);
+        string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveBuffer.Length);
         Console.WriteLine(receiveMessage);
+        
+        socket.Shutdown(SocketShutdown.Both);
         socket.Close();
     }
 }

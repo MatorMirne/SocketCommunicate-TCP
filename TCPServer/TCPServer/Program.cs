@@ -10,12 +10,10 @@ class Program
         
         serverSocket.Bind(endPoint);
         serverSocket.Listen(10); // 추후 3만으로 업그레이드
-        Socket clientSocket = serverSocket.Accept(); // 저장된 소켓 정보를 반환
-        
-        
+        Socket clientSocket = serverSocket.Accept();
 
         byte[] receiveBuffer = new byte[1024];
-        int length = clientSocket.Receive(receiveBuffer, 0, 1024, SocketFlags.None);
+        int length = clientSocket.Receive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None);
         string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
         Console.WriteLine(receiveMessage);
         
@@ -24,7 +22,9 @@ class Program
         clientSocket.Send(sendBuffer, 0, sendMessage.Length, SocketFlags.None);
         Console.WriteLine(sendMessage);
         
+        clientSocket.Shutdown(SocketShutdown.Both);
         clientSocket.Close();
+        
         serverSocket.Close();
     }
 }
