@@ -11,7 +11,7 @@ class Program
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         socket.Connect(endPoint);
         
-        string message = "1";
+        string message = "client message";
         byte[] sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
         socket.Send(sendBuffer);
         
