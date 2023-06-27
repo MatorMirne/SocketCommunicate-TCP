@@ -37,7 +37,7 @@ namespace TCPServer
 
             if (receiveMessage == "") return false; // 이렇게 하는게 맞나요?
             
-            Console.WriteLine($"수신 : {receiveMessage}");
+            //Console.WriteLine($"수신 : {receiveMessage}");
             count = Int32.Parse(receiveMessage);
             return true;
         }
@@ -48,7 +48,7 @@ namespace TCPServer
             string sendMessage = newCount.ToString();
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(sendMessage);
             socket.Send(sendBuffer, 0, sendMessage.Length, SocketFlags.None);
-            Console.WriteLine($"발신 : {sendMessage}");
+            //Console.WriteLine($"발신 : {sendMessage}");
         }
 
         void Close()
