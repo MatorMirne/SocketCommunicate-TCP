@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace TCPServer
 {
-    public class Client : IDisposable
+    public class Client
     {
         Socket socket;
         byte[] receiveBuffer = new byte[1024];
@@ -14,6 +14,7 @@ namespace TCPServer
         {
             this.socket = socket;
             Run();
+            Close();
         }
 
         void Run()
@@ -24,8 +25,7 @@ namespace TCPServer
                 {
                     Send();
                 }
-                else break;   
-                
+                else break;
             }
         }
 
@@ -34,7 +34,7 @@ namespace TCPServer
             int length = socket.Receive(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None);
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
 
-            if (receiveMessage == "") return false;
+            if (receiveMessage == "") return false; // 이렇게 하는게 맞나요?
             
             Console.WriteLine(receiveMessage);
             return true;
@@ -48,7 +48,7 @@ namespace TCPServer
             Console.WriteLine(sendMessage);
         }
 
-        public void Dispose()
+        void Close()
         {
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
