@@ -9,6 +9,7 @@ namespace TCPServer
         Socket socket;
         byte[] receiveBuffer = new byte[1024];
         byte[] sendBuffer = new byte[1024];
+        int count;
 
         public Client(Socket socket)
         {
@@ -36,16 +37,18 @@ namespace TCPServer
 
             if (receiveMessage == "") return false; // 이렇게 하는게 맞나요?
             
-            Console.WriteLine(receiveMessage);
+            Console.WriteLine($"수신 : {receiveMessage}");
+            count = Int32.Parse(receiveMessage);
             return true;
         }
 
         void Send()
         {
-            string sendMessage = "send message";
+            int newCount = count + 1;
+            string sendMessage = newCount.ToString();
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(sendMessage);
             socket.Send(sendBuffer, 0, sendMessage.Length, SocketFlags.None);
-            Console.WriteLine(sendMessage);
+            Console.WriteLine($"발신 : {sendMessage}");
         }
 
         void Close()
