@@ -11,6 +11,8 @@ namespace TCPServer
         public Client(Socket socket)
         {
             this.socket = socket;
+            
+            
         }
 
         void Receive()
