@@ -16,10 +16,15 @@ namespace TCPServer
             while (true)
             {
                 Socket clientSocket = serverSocket.Accept();
-                Client client = new Client(clientSocket);
+                ThreadPool.QueueUserWorkItem(ClientWork, clientSocket);
             }
 
             serverSocket.Close();
+        }
+
+        private static void ClientWork(object state)
+        {
+            Client client = new Client(state as Socket);
         }
     }
 }
