@@ -8,11 +8,8 @@ public class Client
     byte[] receiveBuffer = new byte[1024];
     Socket socket;
 
-    int count;
-
     public Client()
     {
-        count = 0;
         Connect();
         Work();
         Disconnect();
@@ -30,15 +27,14 @@ public class Client
     {
         for (int i = 0; i < 3; i++)
         {
-            string message = count.ToString();
+            string message = "데이터 요청";
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
             socket.Send(sendBuffer);
 
             socket.Receive(receiveBuffer);
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveBuffer.Length);
-            //Console.WriteLine($"수신 : {receiveMessage}");
-
-            count = int.Parse(receiveMessage);
+            
+            Console.WriteLine($"{i} 수신 : {receiveMessage}");
         }
     }
 

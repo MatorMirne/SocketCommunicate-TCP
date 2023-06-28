@@ -3,13 +3,12 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Linq;
 using TCPServer;
+using Reservoir;
 
 namespace TCPServer
 {
-    public static
     class Program
     {
-        
         public static void Main(string[] args)
         {
             // 서버 소켓 발행
@@ -41,7 +40,7 @@ namespace TCPServer
             while (true)
             {
                 Socket clientSocket = serverSocket.Accept();
-                
+
                 // 클라이언트 하나당 스레드풀에서 스레드 하나를 할당
                 ThreadPool.QueueUserWorkItem(ClientWork, clientSocket);
             }
@@ -49,7 +48,47 @@ namespace TCPServer
 
         private static void ClientWork(object state)
         {
-            Remote remote = new Remote(state as Socket);
+            Remote remote = RemotePool.AddConnection(state as Socket);
+
+            Run(remote);
+        }
+        
+        
+        static void Run(Remote remote)
+        {
+            while (true)
+            {
+                if (Receive(remote)) Send(remote);
+                else break;
+            }
+            Close(remote);
+        }
+        
+        static bool Receive(Remote remote)
+        {
+            int length = remote.socket.Receive(remote.receiveBuffer, 0, remote.receiveBuffer.Length, SocketFlags.None);
+            string receiveMessage = System.Text.Encoding.UTF8.GetString(remote.receiveBuffer, 0, length);
+
+            if (receiveMessage == "") return false; // 이렇게 하는게 맞나요?
+
+            remote.count++;
+            Console.WriteLine($"수신 : {receiveMessage}");
+            return true;
+        }
+
+        static void Send(Remote remote)
+        {
+            int newCount = remote.count + 1;
+            string sendMessage = newCount.ToString();
+            remote.sendBuffer = System.Text.Encoding.UTF8.GetBytes(sendMessage);
+            remote.socket.Send(remote.sendBuffer, 0, sendMessage.Length, SocketFlags.None);
+            Console.WriteLine($"발신 : {sendMessage}");
+        }
+
+        static void Close(Remote remote)
+        {
+            remote.socket.Shutdown(SocketShutdown.Both);
+            remote.socket.Close();
         }
     }
 }
