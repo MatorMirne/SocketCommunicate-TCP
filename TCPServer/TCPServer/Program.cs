@@ -29,8 +29,6 @@ namespace TCPServer
                 input = Console.ReadLine();
                 int threadCount = ThreadPool.ThreadCount;
                 Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
-                
-                
             }
 
             // 서버 종료
