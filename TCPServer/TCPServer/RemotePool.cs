@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace TCPServer;
 using Reservoir;
 using System.Net.Sockets;
@@ -37,6 +39,22 @@ public class RemotePool
     /// </summary>
     public static void RemoveConnection(Remote remote)
     {
-        Pool.Free(remote);
+        remotePool.list.Remove(remote);
+    }
+    
+    /// <summary>
+    /// 현재 사용중인 오브젝트 수를 반환합니다.
+    /// </summary>
+    public int CountActive()
+    {
+        return remotePool.list.Count;
+    }
+    
+    /// <summary>
+    /// 현재 풀에서 놀고 있는 오브젝트 수를 반환합니다.
+    /// </summary>
+    public int CountAvailable()
+    {
+        return remotePool.pool.freeList.Count;
     }
 }

@@ -26,14 +26,16 @@ namespace TCPServer
             while (input != "exit")
             {
                 input = Console.ReadLine();
-                int threadCount = ThreadPool.ThreadCount;
-                Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
+                Console.WriteLine($"Conncect:{RemotePool.remotePool.CountActive()} | Available:{RemotePool.remotePool.CountAvailable()}");
             }
 
             // 서버 종료
             serverSocket.Close();
         }
 
+        /// <summary>
+        /// 클라이언트 연결 요청을 대기하는 스레드
+        /// </summary>
         static void WaitClientThread(object socket)
         {
             Socket serverSocket = socket as Socket;
@@ -46,12 +48,20 @@ namespace TCPServer
             }
         }
 
+        /// <summary>
+        /// 각 클라이언트마다 하나씩 할당되는 스레드
+        /// </summary>
         private static void ClientWork(object state)
         {
             Remote remote = RemotePool.AddConnection(state as Socket);
 
             Run(remote);
         }
+        
+        
+        
+        
+        
         
         
         static void Run(Remote remote)
@@ -69,7 +79,8 @@ namespace TCPServer
             int length = remote.socket.Receive(remote.receiveBuffer, 0, remote.receiveBuffer.Length, SocketFlags.None);
             string receiveMessage = System.Text.Encoding.UTF8.GetString(remote.receiveBuffer, 0, length);
 
-            if (receiveMessage == "") return false; // 이렇게 하는게 맞나요?
+            if (receiveMessage == "") 
+                return false; // 이렇게 하는게 맞나요?
 
             remote.count++;
             Console.WriteLine($"수신 : {receiveMessage}");
@@ -78,8 +89,7 @@ namespace TCPServer
 
         static void Send(Remote remote)
         {
-            int newCount = remote.count + 1;
-            string sendMessage = newCount.ToString();
+            string sendMessage = remote.count.ToString();
             remote.sendBuffer = System.Text.Encoding.UTF8.GetBytes(sendMessage);
             remote.socket.Send(remote.sendBuffer, 0, sendMessage.Length, SocketFlags.None);
             Console.WriteLine($"발신 : {sendMessage}");
@@ -89,6 +99,10 @@ namespace TCPServer
         {
             remote.socket.Shutdown(SocketShutdown.Both);
             remote.socket.Close();
+            remote.socket = null;
+            
+            // [순서 중요] 메모리를 해제한 후 socket을 제거해야 합니다.
+            RemotePool.RemoveConnection(remote);
         }
     }
 }

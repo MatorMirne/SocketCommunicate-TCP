@@ -2,9 +2,11 @@
 
 class Program
 {
+    private static List<Client> clients = new List<Client>();
+    
     public static void Main(string[] args)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1; i++)
         {
             ThreadPool.QueueUserWorkItem(Work, null);
         }
@@ -16,10 +18,15 @@ class Program
 
         // 입력 감지까지 대기
         Console.ReadKey();
+
+        foreach (var client in clients)
+        {
+            client.Disconnect();
+        }
     }
 
     public static void Work(object state)
     {
-        Client client = new Client();
+        clients.Add(new Client());
     }
 }

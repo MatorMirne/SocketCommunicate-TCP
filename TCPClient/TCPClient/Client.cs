@@ -12,7 +12,6 @@ public class Client
     {
         Connect();
         Work();
-        Disconnect();
     }
 
     void Connect()
@@ -38,7 +37,7 @@ public class Client
         }
     }
 
-    void Disconnect()
+    public void Disconnect()
     {
         socket.Shutdown(SocketShutdown.Both);
         socket.Close();
