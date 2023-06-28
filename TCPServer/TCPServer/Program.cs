@@ -1,10 +1,15 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Net.NetworkInformation;
+using System.Linq;
+using TCPServer;
 
 namespace TCPServer
 {
+    public static
     class Program
     {
+        
         public static void Main(string[] args)
         {
             // 서버 소켓 발행
@@ -17,8 +22,16 @@ namespace TCPServer
             Thread waitClientThread = new Thread(WaitClientThread);
             waitClientThread.Start(serverSocket);
 
-            // 입력 감지 시 서버 종료
-            Console.ReadKey();
+            // exit 입력 시 서버 종료
+            string input="";
+            while (input != "exit")
+            {
+                input = Console.ReadLine();
+                int threadCount = ThreadPool.ThreadCount;
+                Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
+                
+                
+            }
 
             // 서버 종료
             serverSocket.Close();
@@ -38,7 +51,7 @@ namespace TCPServer
 
         private static void ClientWork(object state)
         {
-            Client client = new Client(state as Socket);
+            Remote remote = new Remote(state as Socket);
         }
     }
 }

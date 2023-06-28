@@ -36,7 +36,7 @@ public class Client
 
             socket.Receive(receiveBuffer);
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveBuffer.Length);
-            //Console.WriteLine($"수신 : {receiveMessage}");
+            Console.WriteLine($"수신 : {receiveMessage}");
 
             count = int.Parse(receiveMessage);
         }
