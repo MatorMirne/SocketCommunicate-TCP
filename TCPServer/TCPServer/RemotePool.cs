@@ -39,7 +39,8 @@ public class RemotePool
     /// </summary>
     public static void RemoveConnection(Remote remote)
     {
-        remotePool.list.Remove(remote);
+        remotePool.list.Remove(remote); // 사용 중 리스트에서 제거
+        Pool.Free(remote); // 풀로 오브젝트 반환
     }
     
     /// <summary>
