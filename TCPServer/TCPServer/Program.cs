@@ -103,6 +103,7 @@ namespace TCPServer
             
             // [순서 중요] 메모리를 해제한 후 socket을 제거해야 합니다.
             RemotePool.RemoveConnection(remote);
+            Pool.Free(remote);
         }
     }
 }

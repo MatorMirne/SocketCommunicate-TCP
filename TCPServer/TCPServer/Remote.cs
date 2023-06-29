@@ -24,8 +24,8 @@ namespace TCPServer
             // Called when the object is put back in the pool
             ID = 0;
             socket = null;
-            receiveBuffer = null;
-            sendBuffer = null;
+            Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
+            Array.Clear(sendBuffer, 0, sendBuffer.Length);
             count = 0;
             
             Console.WriteLine("오브젝트 반환");

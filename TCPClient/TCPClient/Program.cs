@@ -6,12 +6,10 @@ class Program
     
     public static void Main(string[] args)
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 100; i++)
         {
             ThreadPool.QueueUserWorkItem(Work, null);
         }
-
-        Thread.Sleep(1000);
         
         int threadCount = ThreadPool.ThreadCount;
         Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
