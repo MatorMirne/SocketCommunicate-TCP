@@ -26,7 +26,7 @@ namespace TCPServer
             while (input != "exit")
             {
                 input = Console.ReadLine();
-                Console.WriteLine($"Conncect:{RemotePool.remotePool.CountActive()} | Available:{RemotePool.remotePool.CountAvailable()}");
+                RemotePool.PrintState();
             }
 
             // 서버 종료
@@ -83,7 +83,7 @@ namespace TCPServer
                 return false; // 이렇게 하는게 맞나요?
 
             remote.count++;
-            Console.WriteLine($"수신 : {receiveMessage}");
+            // Console.WriteLine($"수신 : {receiveMessage}");
             return true;
         }
 
@@ -92,7 +92,7 @@ namespace TCPServer
             string sendMessage = remote.count.ToString();
             remote.sendBuffer = System.Text.Encoding.UTF8.GetBytes(sendMessage);
             remote.socket.Send(remote.sendBuffer, 0, sendMessage.Length, SocketFlags.None);
-            Console.WriteLine($"발신 : {sendMessage}");
+            // Console.WriteLine($"발신 : {sendMessage}");
         }
 
         static void Close(Remote remote)

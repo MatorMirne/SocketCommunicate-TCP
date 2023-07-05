@@ -58,4 +58,9 @@ public class RemotePool
     {
         return remotePool.pool.freeList.Count;
     }
+    
+    public static void PrintState()
+    {
+        Console.WriteLine($"Conncect:{remotePool.CountActive()} | Available:{remotePool.CountAvailable()}");
+    }
 }
