@@ -27,9 +27,6 @@ namespace TCPServer
             Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
             Array.Clear(sendBuffer, 0, sendBuffer.Length);
             count = 0;
-            
-            Console.WriteLine("오브젝트 반환");
-            RemotePool.PrintState();
         }
 
         public int ID;

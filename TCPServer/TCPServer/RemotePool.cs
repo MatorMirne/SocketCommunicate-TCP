@@ -7,9 +7,11 @@ using System.Net.Sockets;
 public class RemotePool
 {
     public static RemotePool remotePool = new RemotePool();
-    
+    public static int idCount = 1;
+
     private Pool<Remote> pool;
     private NodeList<Remote> list;
+
     
     public RemotePool()
     {
@@ -23,12 +25,9 @@ public class RemotePool
     public static Remote AddConnection(Socket socket)
     {
         Remote remote = remotePool.pool.Allocate();
-        
-        remote.ID = 1; // ID 발급 알고리즘 필요
+        remote.ID = 1;
         remote.socket = socket;
-
         remote.count = 0;
-        
         remotePool.list.Add(remote);
 
         return remote;
@@ -39,8 +38,13 @@ public class RemotePool
     /// </summary>
     public static void RemoveConnection(Remote remote)
     {
-        remotePool.list.Remove(remote); // 사용 중 리스트에서 제거
-        Pool.Free(remote); // 풀로 오브젝트 반환
+        lock (remotePool)
+        {
+            Console.WriteLine($"{remote.ID} 오브젝트 반환");
+            remotePool.list.Remove(remote); // 사용 중 리스트에서 제거
+            Pool.Free(remote); // 풀로 오브젝트 반환
+            PrintState();
+        }
     }
     
     /// <summary>
