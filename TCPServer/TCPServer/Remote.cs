@@ -16,7 +16,7 @@ namespace TCPServer
         
         void IPoolable<Remote>.Initialize()
         {
-            Console.WriteLine("오브젝트 할당");
+            Console.WriteLine($"{ID} 오브젝트 초기화");
         }
         
         void IPoolable<Remote>.Reset()

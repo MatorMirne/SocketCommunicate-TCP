@@ -24,15 +24,19 @@ public class RemotePool
     /// </summary>
     public static Remote AddConnection(Socket socket)
     {
-        Remote remote = remotePool.pool.Allocate();
-        remote.ID = 1;
-        remote.socket = socket;
-        remote.count = 0;
-        remotePool.list.Add(remote);
+        Remote remote;
 
+        lock (remotePool)
+        {
+            remote = remotePool.pool.Allocate();
+            remotePool.list.Add(remote);
+        }
+
+        remote.ID = idCount++;
+        remote.socket = socket;
         return remote;
     }
-    
+
     /// <summary>
     /// Remote 객체를 Pool에 반환합니다.
     /// </summary>
