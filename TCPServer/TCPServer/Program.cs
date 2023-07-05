@@ -7,7 +7,7 @@ using Reservoir;
 
 namespace TCPServer
 {
-    class Program
+    partial class  Program
     {
         public static void Main(string[] args)
         {
@@ -26,7 +26,7 @@ namespace TCPServer
             while (input != "exit")
             {
                 input = Console.ReadLine();
-                RemotePool.PrintState();
+                Print(input);
             }
 
             // 서버 종료
