@@ -6,6 +6,8 @@ class Program
     
     public static void Main(string[] args)
     {
+        MyStopWatch.Start();
+        
         for (int i = 0; i < 100; i++)
         {
             ThreadPool.QueueUserWorkItem(Work, null);
