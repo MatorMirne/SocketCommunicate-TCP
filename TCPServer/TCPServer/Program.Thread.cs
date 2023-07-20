@@ -21,9 +21,9 @@ public partial class Program
     /// <summary>
     /// 각 클라이언트마다 하나씩 할당되는 스레드
     /// </summary>
-    private static void ClientWork(object state)
+    private static void ClientWork(object clientSocket)
     {
-        Remote remote = RemotePool.AddConnection(state as Socket);
+        Remote remote = RemotePool.AddConnection(clientSocket as Socket);
 
         Run(remote);
     }
