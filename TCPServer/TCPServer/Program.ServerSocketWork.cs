@@ -3,19 +3,19 @@ namespace TCPServer;
 
 public partial class Program
 {
-    static void Run(Remote remote)
+    static async Task Run(Remote remote)
     {
         while (true)
         {
-            if (Receive(remote)) Send(remote);
+            if (await Receive(remote)) Send(remote);
             else break;
         }
         Close(remote);
     }
         
-    static bool Receive(Remote remote)
+    static async Task<bool> Receive(Remote remote)
     {
-        int length = remote.socket.Receive(remote.receiveBuffer, 0, remote.receiveBuffer.Length, SocketFlags.None);
+        int length = await remote.socket.ReceiveAsync(remote.receiveBuffer, SocketFlags.None);
         string receiveMessage = System.Text.Encoding.UTF8.GetString(remote.receiveBuffer, 0, length);
 
         if (receiveMessage == "") 

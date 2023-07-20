@@ -6,25 +6,26 @@ public partial class Program
     /// <summary>
     /// 클라이언트 연결 요청을 대기하는 스레드
     /// </summary>
-    static void WaitClientThread(object socket)
+    static async void WaitClientThread(object socket)
     {
         Socket serverSocket = socket as Socket;
         while (true)
         {
             Socket clientSocket = serverSocket.Accept();
+            Console.WriteLine("클라이언트 접속");
 
-            // 클라이언트 하나당 스레드풀에서 스레드 하나를 할당
-            ThreadPool.QueueUserWorkItem(ClientWork, clientSocket);
+            await ClientWork(clientSocket);
         }
     }
 
-    /// <summary>
-    /// 각 클라이언트마다 하나씩 할당되는 스레드
-    /// </summary>
-    private static void ClientWork(object clientSocket)
+    private static async Task ClientWork(object clientSocket)
     {
-        Remote remote = RemotePool.AddConnection(clientSocket as Socket);
+        Remote remote;
+        lock (RemotePool.remotePool)
+        {
+            remote = RemotePool.AddConnection(clientSocket as Socket);
+        }
 
-        Run(remote);
+        await Run(remote);
     }
 }

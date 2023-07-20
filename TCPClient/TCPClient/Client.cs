@@ -1,18 +1,18 @@
 using System.Net;
 using System.Net.Sockets;
+
 namespace TCPClient;
 
 public class ClientCounter
 {
     public static ClientCounter clientCounter = new ClientCounter();
-
-    public int count=0;
+    public int count = 0;
 }
 
 public class Client
 {
     public static int count = 0;
-    
+
     byte[] sendBuffer = new byte[1024];
     byte[] receiveBuffer = new byte[1024];
     Socket socket;
@@ -41,7 +41,7 @@ public class Client
 
             socket.Receive(receiveBuffer);
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveBuffer.Length);
-            
+
             Console.WriteLine($"{i} 수신 : {receiveMessage}");
         }
 
