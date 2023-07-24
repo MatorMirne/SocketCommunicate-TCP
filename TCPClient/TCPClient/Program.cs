@@ -21,8 +21,6 @@ class Program
             Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
         }
 
-        // 입력 감지까지 대기
-
         foreach (var client in clients)
         {
             client.Disconnect();

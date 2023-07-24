@@ -42,7 +42,7 @@ public class Client
             socket.Receive(receiveBuffer);
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveBuffer.Length);
 
-            Console.WriteLine($"{i} 수신 : {receiveMessage}");
+            // Console.WriteLine($"{i} 수신 : {receiveMessage}");
         }
 
         lock (ClientCounter.clientCounter)
