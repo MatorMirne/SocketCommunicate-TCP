@@ -13,8 +13,8 @@ class Program
             ThreadPool.QueueUserWorkItem(Work, null);
         }
         
-        int threadCount = ThreadPool.ThreadCount;
-        Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
+        // int threadCount = ThreadPool.ThreadCount;
+        // Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
 
         // 입력 감지까지 대기
         Console.ReadKey();

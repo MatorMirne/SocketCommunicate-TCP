@@ -12,8 +12,6 @@ public partial class Program
         while (true)
         {
             Socket clientSocket = serverSocket.Accept();
-            Console.WriteLine("클라이언트 접속");
-
             await ClientWork(clientSocket);
         }
     }
@@ -21,11 +19,12 @@ public partial class Program
     private static async Task ClientWork(object clientSocket)
     {
         Remote remote;
+        
         lock (RemotePool.remotePool)
         {
             remote = RemotePool.AddConnection(clientSocket as Socket);
         }
 
-        await Run(remote);
+        Task.Run(() => RunAsync(remote));
     }
 }
