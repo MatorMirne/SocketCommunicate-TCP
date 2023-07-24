@@ -21,7 +21,7 @@ namespace TCPServer
             if(ThreadPool.SetMaxThreads(2, 2))
             {
                 // 클라이언트 대기 스레드 실행
-                Thread waitClientThread = new Thread(WaitClientThread);
+                Thread waitClientThread = new Thread(WaitClientThreadAsync);
                 waitClientThread.Start(serverSocket);
 
                 // 주 스레드는 입력을 받음
