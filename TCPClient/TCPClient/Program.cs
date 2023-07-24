@@ -12,12 +12,16 @@ class Program
         {
             ThreadPool.QueueUserWorkItem(Work, null);
         }
-        
-        // int threadCount = ThreadPool.ThreadCount;
-        // Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
+
+        string input = "";
+        while (input != "exit")
+        {
+            input = Console.ReadLine();
+            int threadCount = ThreadPool.ThreadCount;
+            Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
+        }
 
         // 입력 감지까지 대기
-        Console.ReadKey();
 
         foreach (var client in clients)
         {
