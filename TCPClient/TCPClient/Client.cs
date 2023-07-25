@@ -20,7 +20,7 @@ public class Client
     public Client()
     {
         Connect();
-        Work();
+        WorkAsync();
     }
 
     void Connect()
@@ -31,18 +31,21 @@ public class Client
         socket.Connect(endPoint);
     }
 
-    void Work()
+    async void WorkAsync()
     {
-        for (int i = 0; i < 3; i++)
+        for(int i=0; i<3; i++)
         {
             string message = "데이터 요청";
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
-            socket.Send(sendBuffer);
+            
+            // 비동기로 던지고
+            Task.Run(()=>socket.SendAsync(sendBuffer));
 
-            socket.Receive(receiveBuffer);
-            string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveBuffer.Length);
-
-            // Console.WriteLine($"{i} 수신 : {receiveMessage}");
+            // 받는거는 기다리고
+            var length = await socket.ReceiveAsync(receiveBuffer);
+            
+            string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
+            Console.WriteLine($"{i} 수신 : {receiveMessage}");
         }
 
         lock (ClientCounter.clientCounter)
@@ -50,7 +53,7 @@ public class Client
             ClientCounter.clientCounter.count++;
             if (ClientCounter.clientCounter.count == 100)
             {
-                Console.WriteLine($"100명 모두 통신 완료! 걸린 시간 : {MyStopWatch.Stop()}");
+                Console.WriteLine($"{ClientCounter.clientCounter.count}명 모두 통신 완료! 걸린 시간 : {MyStopWatch.Stop()}");
             }
         }
     }

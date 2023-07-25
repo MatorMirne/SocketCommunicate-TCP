@@ -10,7 +10,7 @@ class Program
         
         for (int i = 0; i < 100; i++)
         {
-            ThreadPool.QueueUserWorkItem(Work, null);
+            Task.Run(()=>WorkAsync());
         }
 
         string input = "";
@@ -19,6 +19,7 @@ class Program
             input = Console.ReadLine();
             int threadCount = ThreadPool.ThreadCount;
             Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
+            Console.WriteLine($"통신 완료 클라이언트 수 : {ClientCounter.clientCounter.count}");
         }
 
         foreach (var client in clients)
@@ -27,8 +28,12 @@ class Program
         }
     }
 
-    public static void Work(object state)
+    public static async Task WorkAsync()
     {
-        clients.Add(new Client());
+        var client = new Client();
+        lock (clients)
+        {
+            clients.Add(client);
+        }
     }
 }
