@@ -33,7 +33,8 @@ public class Client
 
     async void WorkAsync()
     {
-        for(int i=0; i<3; i++)
+        var input = "";
+        while(string.Equals(input, "exit") == false)
         {
             string message = "데이터 요청";
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
@@ -45,16 +46,12 @@ public class Client
             var length = await socket.ReceiveAsync(receiveBuffer);
             
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
-            Console.WriteLine($"{i} 수신 : {receiveMessage}");
+            Console.WriteLine($"수신 : {receiveMessage}");
         }
 
         lock (ClientCounter.clientCounter)
         {
             ClientCounter.clientCounter.count++;
-            if (ClientCounter.clientCounter.count == 100)
-            {
-                Console.WriteLine($"{ClientCounter.clientCounter.count}명 모두 통신 완료! 걸린 시간 : {MyStopWatch.Stop()}");
-            }
         }
     }
 
