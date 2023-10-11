@@ -19,11 +19,11 @@ public partial class Program
         string receiveMessage = System.Text.Encoding.UTF8.GetString(remote.receiveBuffer, 0, length);
 
         if (receiveMessage == "") 
-            return false; // 이렇게 하는게 맞나요?
+            return false;
         if(remote.socket.Connected == false)
             return false; 
 
-        remote.count++;
+        // remote.count++;
         // Console.WriteLine($"수신 : {receiveMessage}");
         return true;
     }
