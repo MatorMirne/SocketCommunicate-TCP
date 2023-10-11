@@ -71,4 +71,16 @@ public class RemotePool
     {
         Console.WriteLine($"Conncect:{remotePool.CountActive()} | Available:{remotePool.CountAvailable()}");
     }
+
+    public void CheckConnect()
+    {
+        foreach (var remote in list)
+        {
+            if (remote.socket.Connected == false)
+            {
+                Console.WriteLine("disconnected");
+                RemoveConnection(remote);
+            }
+        }
+    }
 }

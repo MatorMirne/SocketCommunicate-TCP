@@ -21,6 +21,10 @@ namespace TCPServer
             string input = "";
             while (input != "exit")
             {
+                if (input == "connect test")
+                {
+                    RemotePool.remotePool.CheckConnect();
+                }
                 input = Console.ReadLine();
                 Print(input);
             }

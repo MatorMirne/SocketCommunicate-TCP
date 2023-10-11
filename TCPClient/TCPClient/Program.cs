@@ -9,10 +9,11 @@ class Program
     public static void Main(string[] args)
     {
         // MyStopWatch.Start();
-        
+
+        Process.GetCurrentProcess().Exited += OnCancelKeyPress;
         Console.CancelKeyPress += OnCancelKeyPress;
         
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 10; i++)
         {
             Task.Run(()=>WorkAsync());
         }
