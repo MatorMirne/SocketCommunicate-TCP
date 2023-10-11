@@ -13,28 +13,20 @@ namespace TCPServer
             serverSocket.Bind(endPoint);
             serverSocket.Listen(10); // 추후 3만으로 업그레이드
             
-            ThreadPool.SetMinThreads(2, 2);
-            
-            // ThreadPool.GetMinThreads(out var a, out var b);
-            // Console.WriteLine($"{a} {b}");
-            
-            if(ThreadPool.SetMaxThreads(2, 2))
+            // 클라이언트 대기 스레드 실행
+            Thread waitClientThread = new Thread(WaitClientThreadAsync);
+            waitClientThread.Start(serverSocket);
+
+            // 주 스레드는 입력을 받음
+            string input = "";
+            while (input != "exit")
             {
-                // 클라이언트 대기 스레드 실행
-                Thread waitClientThread = new Thread(WaitClientThreadAsync);
-                waitClientThread.Start(serverSocket);
-
-                // 주 스레드는 입력을 받음
-                string input = "";
-                while (input != "exit")
-                {
-                    input = Console.ReadLine();
-                    Print(input);
-                }
-
-                // 서버 종료
-                serverSocket.Close();
+                input = Console.ReadLine();
+                Print(input);
             }
+
+            // 서버 종료
+            serverSocket.Close();
         }
     }
 }

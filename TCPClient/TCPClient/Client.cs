@@ -34,16 +34,29 @@ public class Client
     async void WorkAsync()
     {
         var input = "";
-        while(string.Equals(input, "exit") == false)
+        while (string.Equals(input, "exit") == false)
         {
-            string message = "데이터 요청";
+            string message = "";
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
-            
-            // 비동기로 던지고
-            Task.Run(()=>socket.SendAsync(sendBuffer));
 
-            // 받는거는 기다리고
-            var length = await socket.ReceiveAsync(receiveBuffer);
+            // 비동기로 던지고
+            Task.Run(async () => socket.SendAsync(sendBuffer));
+            
+            int length = 0;
+            try
+            {
+                length = await socket.ReceiveAsync(receiveBuffer);
+            }
+            catch (SocketException e)
+            {
+                if (e.ErrorCode == 89) break; // 듣기 중단 (들을거 없음)
+                else throw;
+            }
+            catch (ObjectDisposedException e)
+            {
+                if (e.ObjectName == "System.Net.Sockets.Socket") break; // 소켓 반납 이후에는 듣지 않음
+                else throw;
+            }
             
             string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
             Console.WriteLine($"수신 : {receiveMessage}");
@@ -57,7 +70,7 @@ public class Client
 
     public void Disconnect()
     {
-        socket.Shutdown(SocketShutdown.Both);
-        socket.Close();
+        socket.Disconnect(true);
+        socket.Close(); 
     }
 }

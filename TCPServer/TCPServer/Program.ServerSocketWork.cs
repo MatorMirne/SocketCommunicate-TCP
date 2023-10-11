@@ -20,6 +20,8 @@ public partial class Program
 
         if (receiveMessage == "") 
             return false; // 이렇게 하는게 맞나요?
+        if(remote.socket.Connected == false)
+            return false; 
 
         remote.count++;
         // Console.WriteLine($"수신 : {receiveMessage}");

@@ -3,15 +3,13 @@ namespace TCPServer;
 
 public partial class Program
 {
-    /// <summary>
-    /// 클라이언트 연결 요청을 대기하는 스레드
-    /// </summary>
+    // 클라이언트 연결 요청을 대기하는 스레드
     static async void WaitClientThreadAsync(object socket)
     {
         Socket serverSocket = socket as Socket;
         while (true)
         {
-            Socket clientSocket = serverSocket.Accept();
+            Socket clientSocket = await serverSocket.AcceptAsync();
             await ClientWorkAsync(clientSocket);
         }
     }
@@ -25,6 +23,6 @@ public partial class Program
             remote = RemotePool.AddConnection(clientSocket as Socket);
         }
 
-        Task.Run(() => RunAsync(remote));
+        Task.Run(async () => RunAsync(remote));
     }
 }
