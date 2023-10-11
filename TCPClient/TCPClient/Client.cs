@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Intrinsics.X86;
 
 namespace TCPClient;
 
@@ -34,13 +35,24 @@ public class Client
     async void WorkAsync()
     {
         var input = "";
+        int cnt = 0;
         while (string.Equals(input, "exit") == false)
         {
-            string message = "";
+            string message = "msg";
+            switch (cnt++)
+            {
+                case 3:
+                    message = "";
+                    break;
+                default:
+                    break;
+            }
+            
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
 
             // 비동기로 던지고
-            Task.Run(async () => socket.SendAsync(sendBuffer));
+            Task.Run(async () => 
+                socket.SendAsync(sendBuffer));
             
             int length = 0;
             try
