@@ -23,7 +23,7 @@ namespace TCPServer
             {
                 if (input == "connect test")
                 {
-                    RemotePool.remotePool.CheckConnect();
+                    RemotePool.remotePool.FindDisconnect();
                 }
                 input = Console.ReadLine();
                 Print(input);

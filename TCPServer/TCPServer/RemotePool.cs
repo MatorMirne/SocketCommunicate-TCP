@@ -72,14 +72,11 @@ public class RemotePool
         Console.WriteLine($"Conncect:{remotePool.CountActive()} | Available:{remotePool.CountAvailable()}");
     }
 
-    public void CheckConnect()
+    public void FindDisconnect()
     {
-        var cnt = 0;
         var disconnectedRemotes = new List<Remote>();
         foreach (var remote in list)
         {
-            cnt++;
-            Console.WriteLine($"{cnt}");
             if (remote.socket.Connected == false)
             {
                 disconnectedRemotes.Add(remote);
@@ -88,7 +85,6 @@ public class RemotePool
         
         foreach (var remote in disconnectedRemotes)
         {
-            Console.WriteLine("disconnect");
             RemoveConnection(remote);
         }
     }

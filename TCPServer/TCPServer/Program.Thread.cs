@@ -20,6 +20,7 @@ public partial class Program
         
         lock (RemotePool.remotePool)
         {
+            RemotePool.remotePool.FindDisconnect();
             remote = RemotePool.AddConnection(clientSocket as Socket);
         }
 
