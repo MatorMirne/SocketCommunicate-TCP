@@ -1,4 +1,6 @@
-﻿using TCPClient;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using TCPClient;
 
 class Program
 {
@@ -8,7 +10,9 @@ class Program
     {
         // MyStopWatch.Start();
         
-        for (int i = 0; i < 1; i++)
+        Console.CancelKeyPress += OnCancelKeyPress;
+        
+        for (int i = 0; i < 50; i++)
         {
             Task.Run(()=>WorkAsync());
         }
@@ -21,10 +25,13 @@ class Program
             Console.WriteLine($"스레드풀의 스레드 수 : {threadCount}");
             Console.WriteLine($"통신 완료 클라이언트 수 : {ClientCounter.clientCounter.count}");
         }
+        
+        Console.CancelKeyPress -= OnCancelKeyPress;
 
         foreach (var client in clients)
         {
             client.Disconnect();
+            Console.WriteLine("클라이언트 종료");
         }
     }
 
@@ -34,6 +41,18 @@ class Program
         lock (clients)
         {
             clients.Add(client);
+        }
+    }
+    
+    private static void OnCancelKeyPress(object sender, EventArgs e)
+    {
+        Console.WriteLine("클라이언트 종료");
+        int cnt = 0;
+        foreach (var client in clients)
+        {
+            cnt++;
+            Console.WriteLine($"클라이언트 종료 {cnt}");
+            client.Disconnect();
         }
     }
 }

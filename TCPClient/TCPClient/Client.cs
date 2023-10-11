@@ -35,18 +35,9 @@ public class Client
     async void WorkAsync()
     {
         var input = "";
-        int cnt = 0;
         while (string.Equals(input, "exit") == false)
         {
             string message = "msg";
-            switch (cnt++)
-            {
-                case 3:
-                    message = "";
-                    break;
-                default:
-                    break;
-            }
             
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
 
@@ -84,5 +75,11 @@ public class Client
     {
         socket.Disconnect(true);
         socket.Close(); 
+    }
+    
+    ~Client()
+    {
+        Disconnect();
+        Console.WriteLine("소멸자 호출");
     }
 }
