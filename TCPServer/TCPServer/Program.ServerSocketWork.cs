@@ -24,7 +24,7 @@ public partial class Program
             return false; 
 
         // remote.count++;
-        // Console.WriteLine($"수신 : {receiveMessage}");
+        Console.WriteLine($"수신 : {receiveMessage}");
         return true;
     }
 

@@ -1,6 +1,10 @@
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Intrinsics.X86;
+using System.Runtime.Serialization;
+using System.Text.Json;
+
 using Protocol;
 
 namespace TCPClient;
@@ -36,11 +40,14 @@ public class Client
     async void WorkAsync()
     {
         var input = "";
+        var request = new MessageRequest();
+        
         while (string.Equals(input, "exit") == false)
         {
-            string message = "msg";
-            
-            sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
+            request.Message = "msg";
+            string json = JsonSerializer.Serialize(request);
+
+            sendBuffer = System.Text.Encoding.UTF8.GetBytes(json);
 
             // 비동기로 던지고
             Task.Run(async () => socket.SendAsync(sendBuffer));
