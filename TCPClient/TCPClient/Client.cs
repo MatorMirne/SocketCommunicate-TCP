@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Intrinsics.X86;
+using Protocol;
 
 namespace TCPClient;
 
@@ -42,8 +43,7 @@ public class Client
             sendBuffer = System.Text.Encoding.UTF8.GetBytes(message);
 
             // 비동기로 던지고
-            Task.Run(async () => 
-                socket.SendAsync(sendBuffer));
+            Task.Run(async () => socket.SendAsync(sendBuffer));
             
             int length = 0;
             try

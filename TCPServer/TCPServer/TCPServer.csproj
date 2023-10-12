@@ -15,4 +15,8 @@
       <Content Include="bin\Debug\net7.0\TCPServer.runtimeconfig.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Protocol\Protocol.csproj" />
+    </ItemGroup>
+
 </Project>
