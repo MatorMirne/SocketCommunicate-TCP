@@ -60,6 +60,7 @@ public class Client
             catch (SocketException e)
             {
                 if (e.ErrorCode == 89) break; // 듣기 중단 (들을거 없음)
+                if (e.ErrorCode == 57) break; // 듣기 중단 (연결 종료)
                 else throw;
             }
             catch (ObjectDisposedException e)

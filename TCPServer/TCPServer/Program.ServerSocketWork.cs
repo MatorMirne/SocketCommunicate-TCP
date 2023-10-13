@@ -1,4 +1,7 @@
 using System.Net.Sockets;
+using System.Text.Json;
+using Protocol;
+
 namespace TCPServer;
 
 public partial class Program
@@ -7,33 +10,38 @@ public partial class Program
     {
         while (true)
         {
-            if (await ReceiveAsync(remote)) Send(remote);
+            var (isSuccess, response)= await ReceiveAsync(remote);
+            if (isSuccess) Send(remote, (ProtocolResponse)response);
             else break;
         }
         Close(remote);
     }
         
-    static async Task<bool> ReceiveAsync(Remote remote)
+    static async Task<(bool, object)> ReceiveAsync(Remote remote)
     {
         int length = await remote.socket.ReceiveAsync(remote.receiveBuffer, SocketFlags.None);
         string receiveMessage = System.Text.Encoding.UTF8.GetString(remote.receiveBuffer, 0, length);
 
         if (receiveMessage == "") 
-            return false;
+            return (false, null);
         if(remote.socket.Connected == false)
-            return false; 
+            return (false, null);
 
         // remote.count++;
         Console.WriteLine($"수신 : {receiveMessage}");
-        return true;
+
+        var response = new MessageResponse();
+        response.Message = "response message";
+        response.Result = Result.Success;
+        
+        return (true, response);
     }
 
-    static void Send(Remote remote)
+    static void Send(Remote remote, ProtocolResponse response)
     {
-        string sendMessage = remote.count.ToString();
-        remote.sendBuffer = System.Text.Encoding.UTF8.GetBytes(sendMessage);
-        remote.socket.Send(remote.sendBuffer, 0, sendMessage.Length, SocketFlags.None);
-        // Console.WriteLine($"발신 : {sendMessage}");
+        string json = JsonSerializer.Serialize(response);
+        remote.sendBuffer = System.Text.Encoding.UTF8.GetBytes(json);
+        remote.socket.Send(remote.sendBuffer, 0, json.Length, SocketFlags.None);
     }
 
     static void Close(Remote remote)
