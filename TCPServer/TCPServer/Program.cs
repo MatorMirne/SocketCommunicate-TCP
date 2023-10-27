@@ -26,7 +26,7 @@ namespace TCPServer
                     RemotePool.remotePool.FindDisconnect();
                 }
                 input = Console.ReadLine();
-                Print(input);
+                PrintState(input);
             }
 
             // 서버 종료

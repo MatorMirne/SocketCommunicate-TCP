@@ -2,7 +2,7 @@ namespace TCPServer;
 
 public partial class Program 
 {
-    static void Print(string input)
+    static void PrintState(string input)
     {
         switch (input)
         {
@@ -14,6 +14,5 @@ public partial class Program
                 RemotePool.PrintState();
                 break;
         }
-
     }
 }
