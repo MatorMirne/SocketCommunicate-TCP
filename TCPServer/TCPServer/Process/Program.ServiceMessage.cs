@@ -8,8 +8,16 @@ public partial class Program
 	{
 		Console.WriteLine($"수신 : {request.Message}");
 		var response = new MessageResponse();
-		response.Message = "response message";
-		response.Result = Result.Success;
-		return (true, response);
+
+		try
+		{
+			response.Message = "response message";
+			response.Result = Result.Success;
+			return (true, response);
+		}
+		catch
+		{
+			return (false, response);
+		}
 	}
 }
