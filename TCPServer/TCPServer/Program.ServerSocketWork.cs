@@ -52,15 +52,6 @@ public partial class Program
 		return (false, null);
 	}
 
-	static async Task<(bool IsSuccess, MessageResponse Response)> ProcessAsync(MessageRequest request)
-	{
-		Console.WriteLine($"수신 : {request.Message}");
-		var response = new MessageResponse();
-		response.Message = "response message";
-		response.Result = Result.Success;
-		return (true, response);
-	}
-
 	static void Send(Remote remote, ProtocolResponse response)
 	{
 		string json = JsonSerializer.Serialize(response);
