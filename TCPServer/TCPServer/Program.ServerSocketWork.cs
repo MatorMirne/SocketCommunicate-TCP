@@ -32,7 +32,7 @@ public partial class Program
 			return (false, null);
 		
 		// remote.count++;
-		Console.WriteLine($"수신 : {rcv}");
+		// Console.WriteLine($"수신 : {rcv}");
 		
 		var obj = JsonConvert.DeserializeObject<JObject>(rcv);
 
