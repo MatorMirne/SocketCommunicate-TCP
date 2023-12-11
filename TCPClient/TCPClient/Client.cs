@@ -17,6 +17,8 @@ public class ClientCounter
 
 public class Client
 {
+    public int Id { get; set; }
+    
     public static int count = 0;
 
     byte[] sendBuffer = new byte[1024];
@@ -25,6 +27,13 @@ public class Client
 
     public Client()
     {
+        Connect();
+        WorkAsync();
+    }
+    
+    public Client(int id)
+    {
+        Id = id;
         Connect();
         WorkAsync();
     }
@@ -40,37 +49,58 @@ public class Client
     async void WorkAsync()
     {
         var input = "";
-        var request = new MessageRequest();
-        
+
         while (string.Equals(input, "exit") == false)
         {
-            request.Message = "msg";
-            string json = JsonSerializer.Serialize(request);
-
-            sendBuffer = System.Text.Encoding.UTF8.GetBytes(json);
-
-            // 비동기로 던지고
-            Task.Run(async () => socket.SendAsync(sendBuffer));
-            
-            int length = 0;
             try
             {
-                length = await socket.ReceiveAsync(receiveBuffer);
+                string json;
+
+                if (false) // for message
+                {
+                    var request = new MessageRequest();
+                    request.Message = "msg";
+                    json = JsonSerializer.Serialize(request);
+                }
+
+                if (true)
+                {
+                    var request = new HandshakeRequest();
+                    request.ClientId = Id; // 다운캐스팅
+                    json = JsonSerializer.Serialize(request);
+                }
+
+                Console.WriteLine($"request:{json}");
+
+                sendBuffer = System.Text.Encoding.UTF8.GetBytes(json);
+
+                // 비동기로 던지고
+                await Task.Run( () => socket.SendAsync(sendBuffer));
+
+                int length = 0;
+                try
+                {
+                    length = await socket.ReceiveAsync(receiveBuffer);
+                }
+                catch (SocketException e)
+                {
+                    if (e.ErrorCode == 89) break; // 듣기 중단 (들을거 없음)
+                    if (e.ErrorCode == 57) break; // 듣기 중단 (연결 종료)
+                    else throw;
+                }
+                catch (ObjectDisposedException e)
+                {
+                    if (e.ObjectName == "System.Net.Sockets.Socket") break; // 소켓 반납 이후에는 듣지 않음
+                    else throw;
+                }
+
+                string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
+                Console.WriteLine($"수신 : {receiveMessage}");
             }
-            catch (SocketException e)
+            catch
             {
-                if (e.ErrorCode == 89) break; // 듣기 중단 (들을거 없음)
-                if (e.ErrorCode == 57) break; // 듣기 중단 (연결 종료)
-                else throw;
+                Console.WriteLine($"ID:{Id} 에서 에러 발생");
             }
-            catch (ObjectDisposedException e)
-            {
-                if (e.ObjectName == "System.Net.Sockets.Socket") break; // 소켓 반납 이후에는 듣지 않음
-                else throw;
-            }
-            
-            string receiveMessage = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, length);
-            Console.WriteLine($"수신 : {receiveMessage}");
         }
 
         lock (ClientCounter.clientCounter)

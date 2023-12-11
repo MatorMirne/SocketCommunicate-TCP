@@ -7,6 +7,7 @@ public partial class Program
 	static async Task<(bool IsSuccess, MessageResponse Response)> ProcessAsync(MessageRequest request)
 	{
 		Console.WriteLine($"수신 : {request.Message}");
+		PrintState("all");
 		var response = new MessageResponse();
 
 		try

@@ -14,8 +14,9 @@ public partial class Program
 		while (true)
 		{
 			var receive = await ReceiveAsync(remote);
-			if (receive.IsSuccess == false) break;
-			Send(remote, receive.Response);
+			if (receive.IsSuccess == false) 
+				break;
+			// Send(remote, receive.Response);
 		}
 
 		Close(remote);
@@ -25,13 +26,13 @@ public partial class Program
 	{
 		int length = await remote.socket.ReceiveAsync(remote.receiveBuffer, SocketFlags.None);
 		string rcv = System.Text.Encoding.UTF8.GetString(remote.receiveBuffer, 0, length);
-		
+
 		if (rcv == "" || rcv.Length == 0)
 			return (false, null);
+		
 		if (remote.socket.Connected == false)
 			return (false, null);
 		
-		// remote.count++;
 		// Console.WriteLine($"수신 : {rcv}");
 		
 		var obj = JsonConvert.DeserializeObject<JObject>(rcv);
@@ -41,12 +42,15 @@ public partial class Program
 			(bool IsSuccess, ProtocolResponse Response) Result = (false, null);
 			switch (value?.Value<int>())
 			{
+				case (int)ProtocolId.Handshake:
+					Result = await ProcessAsync(JsonConvert.DeserializeObject<HandshakeRequest>(rcv));
+					break;
 				case (int)ProtocolId.Mesasge:
 					Result = await ProcessAsync(JsonConvert.DeserializeObject<MessageRequest>(rcv));
 					break;
 			}
 			
-			if(Result.Response != null) return (Result.IsSuccess, (ProtocolResponse)Result.Response);
+			if(Result.Response != null) return Result;
 		}
 
 		return (false, null);

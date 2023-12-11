@@ -7,6 +7,8 @@ namespace TCPServer
 {
     public class Remote : IPoolable<Remote>
     {
+        public static int idCount;
+
         #region IPoolable Members
         
         Pool<Remote> IPoolable<Remote>.Pool { get; set; }
@@ -26,14 +28,12 @@ namespace TCPServer
             socket = null;
             Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
             Array.Clear(sendBuffer, 0, sendBuffer.Length);
-            count = 0;
         }
 
         public int ID;
         public Socket socket;
         public byte[] receiveBuffer = new byte[1024];
         public byte[] sendBuffer = new byte[1024];
-        public int count;
         
         #endregion
     }

@@ -11,13 +11,13 @@ namespace TCPServer
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 51225);
             Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(endPoint);
-            serverSocket.Listen(10); // 추후 3만으로 업그레이드
+            serverSocket.Listen(10);
             
             // 클라이언트 대기 스레드 실행
             Thread waitClientThread = new Thread(WaitClientThreadAsync);
             waitClientThread.Start(serverSocket);
 
-            // 주 스레드는 입력을 받음
+            // 주 스레드는 입력 처리
             string input = "";
             while (input != "exit")
             {
