@@ -16,13 +16,14 @@ public partial class Program
 
     private static async Task ClientWorkAsync(object clientSocket)
     {
-        Remote remote;
+        Remote remote = new Remote() { socket = (Socket)clientSocket };
         
-        lock (RemotePool.remotePool)
-        {
-            RemotePool.remotePool.FindDisconnect();
-            remote = RemotePool.AddConnection(clientSocket as Socket);
-        }
+        // 삭제
+        // lock (RemotePool.remotePool)
+        // {
+        //     RemotePool.remotePool.FindDisconnect();
+        //     remote = RemotePool.AddConnection(clientSocket as Socket);
+        // }
 
         Task.Run(async () => RunAsync(remote));
     }

@@ -11,7 +11,6 @@ public partial class Program
                 break;    
                 
             default:
-                RemotePool.PrintState();
                 break;
         }
     }

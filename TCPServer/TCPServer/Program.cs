@@ -21,10 +21,12 @@ namespace TCPServer
             string input = "";
             while (input != "exit")
             {
-                if (input == "connect test")
-                {
-                    RemotePool.remotePool.FindDisconnect();
-                }
+                // 연결 미종료된 노드 검색 // 삭제
+                // if (input == "connect test")
+                // {
+                //     RemotePool.remotePool.FindDisconnect();
+                // }
+                
                 input = Console.ReadLine();
                 PrintState(input);
             }
